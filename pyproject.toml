@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cifake-guard"
+version = "2.0.0"
+description = "Calibrated, explainable ensemble for detecting AI-generated images (CIFAKE benchmark)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=2.2", "torchvision>=0.17", "numpy>=1.24", "pandas>=2.0", "scikit-learn>=1.3", "scipy>=1.10",
+  "matplotlib>=3.7", "pillow>=10.0", "pyyaml>=6.0", "fastapi>=0.110", "uvicorn>=0.27",
+  "python-multipart>=0.0.9", "kagglehub>=0.2", "truststore>=0.8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.27"]
+unseen = ["diffusers>=0.27"]
+
+[tool.setuptools.packages.find]
+include = ["cifake_guard*", "app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

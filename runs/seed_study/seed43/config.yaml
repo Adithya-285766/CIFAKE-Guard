@@ -1,0 +1,92 @@
+seed: 43
+device: auto
+deterministic: false
+paths:
+  data_root: null
+  cache_dir: data_cache
+  output_dir: runs/seed_study/seed43
+data:
+  train_per_class: 10000
+  val_per_class: 1000
+  calib_per_class: 1000
+  test_per_class: null
+  batch_size: 128
+  eval_batch_size: 512
+  exclude_test_near_duplicates: false
+augment:
+  hflip: true
+  translate: 0.125
+  robust: false
+  robust_p: 0.5
+training:
+  patience: 4
+  grad_clip: 1.0
+  amp: true
+models:
+  LightCNN:
+    arch: light_cnn
+    epochs: 15
+    lr: 0.002
+    weight_decay: 0.0005
+    warmup_epochs: 1
+    label_smoothing: 0.0
+  EfficientNetB0:
+    arch: efficientnet_b0
+    img_size: 64
+    pretrained: true
+    epochs: 5
+    lr: 0.001
+    weight_decay: 0.0001
+    warmup_epochs: 1
+    freeze_epochs: 1
+    label_smoothing: 0.0
+    batch_size: 64
+  TinyViT:
+    arch: tiny_vit
+    epochs: 12
+    lr: 0.001
+    weight_decay: 0.05
+    warmup_epochs: 2
+    label_smoothing: 0.1
+  SFHybrid:
+    arch: sf_hybrid
+    epochs: 12
+    lr: 0.002
+    weight_decay: 0.005
+    warmup_epochs: 1
+    label_smoothing: 0.0
+    use_freq: true
+    use_transformer: true
+  SFHybrid_noFreq:
+    arch: sf_hybrid
+    use_freq: false
+    epochs: 12
+    lr: 0.002
+    weight_decay: 0.005
+    warmup_epochs: 1
+  SFHybrid_robust:
+    arch: sf_hybrid
+    epochs: 12
+    lr: 0.002
+    weight_decay: 0.005
+    warmup_epochs: 1
+    augment:
+      robust: true
+      robust_p: 0.5
+  LightCNN_robust:
+    arch: light_cnn
+    epochs: 15
+    lr: 0.002
+    weight_decay: 0.0005
+    warmup_epochs: 1
+    augment:
+      robust: true
+      robust_p: 0.5
+evaluation:
+  bootstrap: 1000
+  robustness_per_class: 1000
+  ensemble_members:
+  - LightCNN
+  - EfficientNetB0
+  - TinyViT
+  - SFHybrid

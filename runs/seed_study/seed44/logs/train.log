@@ -1,0 +1,21 @@
+2026-11-23 22:15:31,674 | INFO    | cifake_guard.data | Downloading / locating CIFAKE via kagglehub (birdy654/cifake-real-and-ai-generated-synthetic-images)
+2026-11-23 22:15:42,365 | INFO    | cifake_guard.pipeline | Re-using stored splits from runs\seed_study\seed44\results\splits.json
+2026-11-23 22:15:42,568 | INFO    | cifake_guard.pipeline | Split sizes: {'train': 20000, 'val': 2000, 'calib': 2000, 'test': 20000}
+2026-11-23 22:15:42,732 | INFO    | cifake_guard.training | Training LightCNN | 0.583 M params | 15 epochs | 156 steps/epoch | device=cpu
+2026-11-23 22:20:03,471 | INFO    | cifake_guard.training | [LightCNN] epoch 01/15 | train loss 0.3665 acc 0.8304 | val loss 0.4551 acc 0.7950 auc 0.9377 | 260s *best*
+2026-11-23 22:24:08,385 | INFO    | cifake_guard.training | [LightCNN] epoch 02/15 | train loss 0.2565 acc 0.8965 | val loss 0.2352 acc 0.9010 auc 0.9701 | 244s *best*
+2026-11-23 22:28:36,207 | INFO    | cifake_guard.training | [LightCNN] epoch 03/15 | train loss 0.2224 acc 0.9094 | val loss 0.2412 acc 0.8960 auc 0.9730 | 267s 
+2026-11-23 22:33:04,588 | INFO    | cifake_guard.training | [LightCNN] epoch 04/15 | train loss 0.1976 acc 0.9236 | val loss 0.1728 acc 0.9310 auc 0.9837 | 267s *best*
+2026-11-23 22:37:28,005 | INFO    | cifake_guard.training | [LightCNN] epoch 05/15 | train loss 0.1912 acc 0.9259 | val loss 0.3201 acc 0.8875 auc 0.9823 | 262s 
+2026-11-23 22:41:37,947 | INFO    | cifake_guard.training | [LightCNN] epoch 06/15 | train loss 0.1778 acc 0.9297 | val loss 0.3259 acc 0.8705 auc 0.9827 | 249s 
+2026-11-23 22:45:49,248 | INFO    | cifake_guard.training | [LightCNN] epoch 07/15 | train loss 0.1628 acc 0.9366 | val loss 0.2269 acc 0.9000 auc 0.9852 | 250s 
+2026-11-23 22:49:15,841 | INFO    | cifake_guard.training | [LightCNN] epoch 08/15 | train loss 0.1517 acc 0.9402 | val loss 0.1492 acc 0.9430 auc 0.9893 | 206s *best*
+2026-11-23 22:52:40,768 | INFO    | cifake_guard.training | [LightCNN] epoch 09/15 | train loss 0.1450 acc 0.9429 | val loss 0.1937 acc 0.9265 auc 0.9889 | 204s 
+2026-11-23 22:55:38,312 | INFO    | cifake_guard.training | [LightCNN] epoch 10/15 | train loss 0.1315 acc 0.9479 | val loss 0.1662 acc 0.9310 auc 0.9880 | 177s 
+2026-11-23 22:58:43,103 | INFO    | cifake_guard.training | [LightCNN] epoch 11/15 | train loss 0.1246 acc 0.9521 | val loss 0.1238 acc 0.9490 auc 0.9914 | 184s *best*
+2026-11-23 23:02:07,012 | INFO    | cifake_guard.training | [LightCNN] epoch 12/15 | train loss 0.1153 acc 0.9544 | val loss 0.1092 acc 0.9545 auc 0.9928 | 203s *best*
+2026-11-23 23:04:17,246 | INFO    | cifake_guard.training | [LightCNN] epoch 13/15 | train loss 0.1077 acc 0.9576 | val loss 0.1079 acc 0.9570 auc 0.9933 | 130s *best*
+2026-11-23 23:05:46,028 | INFO    | cifake_guard.training | [LightCNN] epoch 14/15 | train loss 0.1001 acc 0.9618 | val loss 0.1030 acc 0.9575 auc 0.9936 | 88s *best*
+2026-11-23 23:07:41,370 | INFO    | cifake_guard.training | [LightCNN] epoch 15/15 | train loss 0.0995 acc 0.9611 | val loss 0.1039 acc 0.9575 auc 0.9936 | 115s 
+2026-11-23 23:07:41,425 | INFO    | cifake_guard.training | [LightCNN] best epoch 14 (val loss 0.1030)
+2026-11-23 23:07:41,429 | INFO    | cifake_guard.train | Done. Checkpoints in runs\seed_study\seed44\checkpoints

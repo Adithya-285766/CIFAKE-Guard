@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+data_cache/
+data_unseen/
+runs/smoke/
+runs/*/logs/
+*.zip
+# Trained checkpoints of the documented experiment are small (<20 MB) and kept on purpose:
+# runs/cpu_experiment/checkpoints/
+runs/logs/

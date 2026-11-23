@@ -1,0 +1,44 @@
+# The experiment actually run for docs/RESEARCH.md on a laptop CPU (Intel Core Ultra 5 125U, no GPU).
+# Compute-limited protocol: 10k training images per class (20 % of the training split) and the
+# FULL official test split (10k REAL + 10k FAKE). EfficientNet-B0 uses 64 px inputs instead of 128 px
+# to stay affordable on CPU. See configs/full_gpu.yaml for the full-data protocol.
+seed: 42
+paths:
+  output_dir: runs/cpu_experiment
+data:
+  train_per_class: 10000
+  val_per_class: 1000
+  calib_per_class: 1000
+  test_per_class: null
+  batch_size: 128
+evaluation:
+  bootstrap: 1000
+  robustness_per_class: 1000
+  ensemble_members: [LightCNN, EfficientNetB0, TinyViT, SFHybrid]
+models:
+  LightCNN: {epochs: 15}
+  EfficientNetB0: {epochs: 5, img_size: 64, batch_size: 64}
+  TinyViT: {epochs: 12}
+  SFHybrid: {epochs: 12}
+  # --- ablations / variants -------------------------------------------------------------
+  SFHybrid_noFreq:          # removes the frequency token -> isolates the contribution of the spectral branch
+    arch: sf_hybrid
+    use_freq: false
+    epochs: 12
+    lr: 2.0e-3
+    weight_decay: 5.0e-3
+    warmup_epochs: 1
+  SFHybrid_robust:          # same model trained with JPEG/blur/noise/resize/colour augmentation
+    arch: sf_hybrid
+    epochs: 12
+    lr: 2.0e-3
+    weight_decay: 5.0e-3
+    warmup_epochs: 1
+    augment: {robust: true, robust_p: 0.5}
+  LightCNN_robust:
+    arch: light_cnn
+    epochs: 15
+    lr: 2.0e-3
+    weight_decay: 5.0e-4
+    warmup_epochs: 1
+    augment: {robust: true, robust_p: 0.5}

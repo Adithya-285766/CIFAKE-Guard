@@ -1,0 +1,28 @@
+{
+  "members": [
+    "LightCNN_robust",
+    "SFHybrid_robust",
+    "EfficientNetB0",
+    "TinyViT"
+  ],
+  "temperatures": {
+    "LightCNN_robust": 1.0929922442308462,
+    "SFHybrid_robust": 1.0604089840948907,
+    "EfficientNetB0": 1.1272384069288026,
+    "TinyViT": 0.7483813326179939
+  },
+  "weights": [
+    0.32423488351158986,
+    0.22435590703791528,
+    0.45093214385175795,
+    0.00047706559873693583
+  ],
+  "stack_coef": [
+    0.3339118904320581,
+    0.2703833639945365,
+    0.5134537145212364,
+    0.05205769733166269
+  ],
+  "stack_intercept": -0.13339770201326878,
+  "method": "weighted"
+}

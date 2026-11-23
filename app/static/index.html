@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CIFAKE-Guard</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.2 6 2.25V11c0 4-2.6 7.8-6 8.9-3.4-1.1-6-4.9-6-8.9V6.45l6-2.25Zm-1 4.3v5.2l4.3 2.6.9-1.5-3.2-1.9V8.5h-2Z"/></svg>
+    <span>CIFAKE-Guard</span><small>AI-generated image forensics</small>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="analyse" role="tab">Analyse</button>
+    <button class="tab" data-tab="performance" role="tab">Model performance</button>
+    <button class="tab" data-tab="about" role="tab">About &amp; limitations</button>
+  </nav>
+  <div id="status" class="pill">connecting…</div>
+</header>
+
+<main>
+  <!-- ============================== ANALYSE ============================== -->
+  <section id="tab-analyse" class="tabpane active">
+    <div class="layout">
+      <div class="col-left">
+        <div class="card">
+          <h2>1 · Upload an image</h2>
+          <label id="drop" class="drop" tabindex="0">
+            <input id="file" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,image/gif" hidden>
+            <div id="drop-empty">
+              <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 13v6H5v-6H3v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-2Zm-6-9.4 3.3 3.3 1.4-1.4L12 0 6.3 5.5l1.4 1.4L11 3.6V15h2V3.6Z"/></svg>
+              <p><b>Drop an image here</b> or click to browse</p>
+              <p class="muted small">JPEG, PNG, WebP, BMP or GIF · max 10 MB</p>
+            </div>
+            <img id="preview" alt="preview" hidden>
+          </label>
+          <div id="file-meta" class="muted small"></div>
+          <label class="check"><input id="opt-explain" type="checkbox" checked> Compute explanation heatmaps</label>
+          <button id="analyse" class="btn primary" disabled>Analyse image</button>
+          <div id="error" class="error" role="alert" hidden></div>
+        </div>
+        <div class="card" id="input-card" hidden>
+          <h2>What the models see</h2>
+          <div class="seen">
+            <img id="seen-img" alt="32x32 model input" class="pix">
+            <div class="small" id="pre-notes"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-right">
+        <div id="placeholder" class="card placeholder">
+          <h2>2 · Results</h2>
+          <p class="muted">Upload an image to see the ensemble verdict, each model's opinion, how much the models
+            agree, and visual explanations of <em>why</em>.</p>
+        </div>
+
+        <div id="results" hidden>
+          <div class="card verdict-card">
+            <div class="gauge" id="gauge"><svg viewBox="0 0 120 120"><circle class="g-bg" cx="60" cy="60" r="52"/>
+              <circle class="g-fg" id="gauge-arc" cx="60" cy="60" r="52"/></svg>
+              <div class="g-text"><span id="gauge-val">–</span><small>AI-generated</small></div></div>
+            <div class="verdict-body">
+              <div id="verdict" class="verdict">–</div>
+              <div id="band" class="band"></div>
+              <div class="agree" id="agree"></div>
+              <div class="actions">
+                <a id="dl-html" class="btn" download>Download report (HTML)</a>
+                <a id="dl-json" class="btn ghost" download>Download data (JSON)</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>In plain language</h2>
+            <ul id="summary" class="summary"></ul>
+          </div>
+
+          <div class="card">
+            <h2>Individual models <span class="muted small">calibrated probability of “AI-generated”</span></h2>
+            <div id="model-bars"></div>
+            <details class="small"><summary>Other ensemble strategies</summary><table id="strategies" class="tbl"></table></details>
+          </div>
+
+          <div class="card" id="explain-card">
+            <h2>Why? Visual explanations</h2>
+            <div class="chips" id="model-chips"></div>
+            <div class="xgrid" id="xgrid"></div>
+          </div>
+
+          <div class="card">
+            <h2>Frequency analysis <span class="muted small">model-independent forensic cue</span></h2>
+            <div class="xgrid" id="freq"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== PERFORMANCE ============================== -->
+  <section id="tab-performance" class="tabpane">
+    <div class="card">
+      <h2>Held-out test performance</h2>
+      <p class="muted small">Official CIFAKE test split, temperature-scaled probabilities, threshold 0.5. Produced by
+        <code>scripts/evaluate.py</code>; nothing on this page is hand-entered.</p>
+      <div class="scroll"><table id="perf-table" class="tbl"></table></div>
+    </div>
+    <div class="card">
+      <h2>Generalisation to an unseen generator</h2>
+      <div class="scroll" id="unseen"></div>
+    </div>
+    <div class="card">
+      <h2>Robustness to image transformations</h2>
+      <div class="scroll"><table id="rob-table" class="tbl"></table></div>
+    </div>
+    <div class="card">
+      <h2>Figures</h2>
+      <div id="plots" class="plots"></div>
+    </div>
+  </section>
+
+  <!-- ============================== ABOUT ============================== -->
+  <section id="tab-about" class="tabpane">
+    <div class="card prose">
+      <h2>How it works</h2>
+      <p>Four detectors look at the image independently, each in a different way:</p>
+      <ul>
+        <li><b>LightCNN</b>: a small convolutional network trained from scratch on local pixel patterns.</li>
+        <li><b>EfficientNet-B0</b>: a large ImageNet-pretrained network, fine-tuned (transfer learning).</li>
+        <li><b>TinyViT</b>: a Vision Transformer that relates all image patches to each other with self-attention.</li>
+        <li><b>SFHybrid</b>: a new spatial-frequency hybrid that combines convolutional pixel features with the
+          image's Fourier spectrum. AI generators often leave periodic traces there.</li>
+      </ul>
+      <p>Each model's probability is <b>calibrated</b> with temperature scaling, so that “80 %” means right about 80 % of the time
+        on held-out data. The calibrated scores are combined by a <b>weighted ensemble</b> whose weights were learned on a
+        separate calibration set.</p>
+      <h2>Reading the explanations</h2>
+      <ul>
+        <li><b>Grad-CAM / Grad-CAM++</b>: bright regions influenced the decision most.</li>
+        <li><b>Integrated Gradients</b>: red pixels push toward “AI-generated”, blue toward “real”.</li>
+        <li><b>Attention rollout</b>: where the transformer looked.</li>
+        <li><b>Frequency spectrum</b>: the image's fine-detail pattern, compared with the average real and AI image.</li>
+      </ul>
+      <h2>Limitations (please read)</h2>
+      <ul>
+        <li>The models were trained only on <b>CIFAKE</b>: 32×32-pixel CIFAR-10 photos versus Stable Diffusion v1.4 images.
+          Larger uploads are shrunk to 32×32, which discards most fine detail.</li>
+        <li>Accuracy drops on images from <b>other generators</b> and after <b>compression, blurring or resizing</b>. See the
+          “Model performance” tab for measured numbers.</li>
+        <li>Heatmaps show what influenced a model. They do not prove an image is fake.</li>
+        <li>Use this tool as decision support only, never as sole evidence.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<footer class="muted small">CIFAKE-Guard · research prototype · <a href="/docs">API docs</a></footer>
+<script src="/static/app.js"></script>
+</body>
+</html>
